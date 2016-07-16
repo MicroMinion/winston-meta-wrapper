@@ -11,15 +11,16 @@ var wrapper = function (logger) {
 
   _.each(_.functions(logger), function (funcName) {
     newLogger[funcName] = function () {
+      var args = Array.prototype.slice.call(arguments)
       var meta = newLogger.getMeta()
-      var fmtMatch = arguments[0] && arguments[0].match && arguments[0].match(formatRegExp)
+      var fmtMatch = args[0] && args[0].match && args[0].match(formatRegExp)
       var formatArguments = fmtMatch ? fmtMatch.length : 0
-      if (_.isObject(arguments[formatArguments + 1])) {
-        arguments[formatArguments + 1] = extend(meta, arguments[formatArguments + 1])
+      if (_.isObject(args[formatArguments + 1])) {
+        args[formatArguments + 1] = extend(meta, args[formatArguments + 1])
       } else {
-        arguments.splice(formatArguments + 1, 0, meta)
+        args.splice(formatArguments + 1, 0, meta)
       }
-      logger[funcName].apply(logger, arguments)
+      logger[funcName].apply(logger, args)
     }
   })
 
