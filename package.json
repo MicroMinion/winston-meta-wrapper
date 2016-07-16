@@ -1,6 +1,6 @@
 {
   "name": "winston-meta-wrapper",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Wraps Winston logger to always add a set of metadata",
   "main": "index.js",
   "scripts": {
