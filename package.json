@@ -26,6 +26,7 @@
     "lodash": "^4.13.1"
   },
   "devDependencies": {
-    "publish": "^0.6.0"
+    "publish": "^0.6.0",
+    "winston": "^2.2.0"
   }
 }
