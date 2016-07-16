@@ -4,6 +4,8 @@
   "description": "Wraps Winston logger to always add a set of metadata",
   "main": "index.js",
   "scripts": {
+    "test": "echo",
+    "2npm": "publish"
   },
   "keywords": [
     "winston",
@@ -15,5 +17,8 @@
   "dependencies": {
     "extend.js": "0.0.2",
     "lodash": "^4.13.1"
+  },
+  "devDependencies": {
+    "publish": "^0.6.0"
   }
 }
