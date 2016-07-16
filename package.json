@@ -1,0 +1,19 @@
+{
+  "name": "winston-meta-wrapper",
+  "version": "0.0.1",
+  "description": "Wraps Winston logger to always add a set of metadata",
+  "main": "index.js",
+  "scripts": {
+  },
+  "keywords": [
+    "winston",
+    "metadata",
+    "wrapper"
+  ],
+  "author": "Thomas Delaet <thomas@delaet.org>",
+  "license": "MIT",
+  "dependencies": {
+    "extend.js": "0.0.2",
+    "lodash": "^4.13.1"
+  }
+}
