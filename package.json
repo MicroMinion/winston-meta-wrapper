@@ -12,7 +12,14 @@
     "metadata",
     "wrapper"
   ],
-  "author": "Thomas Delaet <thomas@delaet.org>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/MicroMinion/winston-meta-wrapper.git"
+  },
+  "author": {
+    "name": "Thomas Delaet",
+    "email": "thomas@delaet.org"
+  },
   "license": "MIT",
   "dependencies": {
     "extend.js": "0.0.2",
