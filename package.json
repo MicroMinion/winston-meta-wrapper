@@ -1,6 +1,6 @@
 {
   "name": "winston-meta-wrapper",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Wraps Winston logger to always add a set of metadata",
   "main": "index.js",
   "scripts": {
@@ -22,8 +22,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "extend.js": "0.0.2",
-    "lodash": "^4.14.0"
+    "lodash": "^4.14.2"
   },
   "devDependencies": {
     "publish": "^0.6.0",

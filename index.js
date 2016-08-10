@@ -1,45 +1,66 @@
 'use strict'
 
 var _ = require('lodash')
-var extend = require('extend.js')
 
 const formatRegExp = /%[sdj]/g
 
 var wrapper = function (logger) {
-  var self = this
-  var newLogger = {}
+  return new WinstonMetaWrapper(logger)
+}
 
-  _.each(_.functions(logger), function (funcName) {
-    newLogger[funcName] = function () {
-      var args = Array.prototype.slice.call(arguments)
-      var meta = newLogger.getMeta()
-      var fmtMatch = args[0] && args[0].match && args[0].match(formatRegExp)
-      var formatArguments = fmtMatch ? fmtMatch.length : 0
-      if (_.isObject(args[formatArguments + 1])) {
-        args[formatArguments + 1] = extend(meta, args[formatArguments + 1])
-      } else {
-        args.splice(formatArguments + 1, 0, meta)
-      }
-      logger[funcName].apply(logger, args)
-    }
-  })
+var WinstonMetaWrapper = function (logger) {
+  this._meta = {}
+  this._logger = logger
+}
 
-  newLogger.addMeta = function (meta) {
-    if (!this.meta) {
-      this.meta = {}
-    }
-    this.meta = extend(this.meta, meta)
+WinstonMetaWrapper.prototype.log = function () {
+  var args = Array.prototype.slice.call(arguments)
+  var fmtMatch = args[1] && args[1].match && args[1].match(formatRegExp)
+  var formatArguments = fmtMatch ? fmtMatch.length : 0
+  if (_.isObject(args[formatArguments + 2])) {
+    var meta = _.cloneDeep(this._meta)
+    _.merge(meta, args[formatArguments + 2])
+    args[formatArguments + 2] = meta
+  } else {
+    args.splice(formatArguments + 2, 0, _.cloneDeep(this._meta))
   }
+  this._logger.log.apply(this._logger, args)
+}
 
-  newLogger.getMeta = function () {
-    if (!this.meta) {
-      return {}
-    } else {
-      return this.meta
-    }
-  }
+WinstonMetaWrapper.prototype.error = function () {
+  var args = Array.prototype.slice.call(arguments)
+  args.unshift('error')
+  this.log.apply(this, args)
+}
 
-  return newLogger
+WinstonMetaWrapper.prototype.warn = function () {
+  var args = Array.prototype.slice.call(arguments)
+  args.unshift('warn')
+  this.log.apply(this, args)
+}
+WinstonMetaWrapper.prototype.info = function () {
+  var args = Array.prototype.slice.call(arguments)
+  args.unshift('info')
+  this.log.apply(this, args)
+}
+WinstonMetaWrapper.prototype.verbose = function () {
+  var args = Array.prototype.slice.call(arguments)
+  args.unshift('verbose')
+  this.log.apply(this, args)
+}
+WinstonMetaWrapper.prototype.debug = function () {
+  var args = Array.prototype.slice.call(arguments)
+  args.unshift('debug')
+  this.log.apply(this, args)
+}
+WinstonMetaWrapper.prototype.silly = function () {
+  var args = Array.prototype.slice.call(arguments)
+  args.unshift('silly')
+  this.log.apply(this, args)
+}
+
+WinstonMetaWrapper.prototype.addMeta = function (meta) {
+  _.merge(this._meta, meta)
 }
 
 module.exports = wrapper
