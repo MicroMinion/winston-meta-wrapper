@@ -2,7 +2,7 @@
 
 var _ = require('lodash')
 
-const formatRegExp = /%[sdj]/g
+var formatRegExp = /%[sdj]/g
 
 var wrapper = function (logger) {
   return new WinstonMetaWrapper(logger)
@@ -11,6 +11,7 @@ var wrapper = function (logger) {
 var WinstonMetaWrapper = function (logger) {
   this._meta = {}
   this._logger = logger
+  this._filters = {}
 }
 
 WinstonMetaWrapper.prototype.log = function () {
@@ -24,7 +25,20 @@ WinstonMetaWrapper.prototype.log = function () {
   } else {
     args.splice(formatArguments + 2, 0, _.cloneDeep(this._meta))
   }
-  this._logger.log.apply(this._logger, args)
+  if (this.filterApplies(args[formatArguments + 2])) {
+    this._logger.log.apply(this._logger, args)
+  }
+}
+
+WinstonMetaWrapper.prototype.filterApplies = function (metaArgs) {
+  return _.every(this._filters, function (regex, key) {
+    var r = new RegExp(regex)
+    if (_.has(metaArgs, key)) {
+      return r.test(metaArgs[key])
+    } else {
+      return true
+    }
+  })
 }
 
 WinstonMetaWrapper.prototype.error = function () {
@@ -57,6 +71,10 @@ WinstonMetaWrapper.prototype.silly = function () {
   var args = Array.prototype.slice.call(arguments)
   args.unshift('silly')
   this.log.apply(this, args)
+}
+
+WinstonMetaWrapper.prototype.setFilter = function (key, filterRegEx) {
+  this._filters[key] = filterRegEx
 }
 
 WinstonMetaWrapper.prototype.addMeta = function (meta) {
